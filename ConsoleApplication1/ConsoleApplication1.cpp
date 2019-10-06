@@ -1,7 +1,6 @@
 #include <conio.h>
 #include <stdio.h>
 #include <string.h>
-#include <locale>
 #define N 180
 
 //количество букв, слов и предложений в тексте
@@ -27,26 +26,23 @@ int main()
 	for (int t = 0; t < k+1; t++, simv = 0) //Просмотр символов массива символов
 	{
 		char ch = arr[t]; //символ для сравнения
-		int found = 0; //условие 
 		for (int i = 0; i < t+1; i++)// Элементы до символа
 		{
 			if (ch == arr[i])
 			{
-				found++; simv++;
+				simv++;
 			}
 		}
+		if (simv > 1) continue;
 		for (int i = t+1; i < k; i++) // Элементы после символа
 		{
 			if (ch == arr[i]) simv++; 
 		}
-		if (found < 2)
-		{
-			if (ch == '\n') printf("Symbol  \\n: %3i time\n", simv); else // Новая строка
-				if (ch == '\t') printf("Symbol  \\t: %3i time\n", simv); else // Табуляция
-					if (ch == -1) printf("Symbol EOF: %3i time\n", simv); else //Символ конца файла
-								printf("Symbol %3c: %3i time\n", ch, simv); // Символ и его количество
-			rat[t] = simv; //Запоминаем колличество символов, встретившихся впервые, с номером их расположения в arr[]
-		}
+		if (ch == '\n') printf("Symbol  \\n: %3i time\n", simv); else // Новая строка
+			if (ch == '\t') printf("Symbol  \\t: %3i time\n", simv); else // Табуляция
+				if (ch == -1) printf("Symbol EOF: %3i time\n", simv); else //Символ конца файла
+					printf("Symbol %3c: %3i time\n", ch, simv); // Символ и его количество
+		rat[t] = simv; //Запоминаем колличество символов, встретившихся впервые, с номером их расположения в arr[]
 	}
 	printf("\nCharacter output by frequency: \n"); //"Вывод символов по частоте"
 	for (int i = k; i > -1; i--)
