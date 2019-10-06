@@ -1,83 +1,78 @@
 #include <conio.h>
 #include <stdio.h>
 #include <string.h>
-#define N 80
+#include <locale>
+#define N 180
 
 //количество букв, слов и предложений в тексте
 
 int main()
 {
 	FILE* f;
-	int pred, slov, bukv, simv;
-	pred = slov = bukv = simv = 0;
-	int pos = 0;
-	char ch;
-
-	if ((f = fopen( "D:/text.txt", "r")) == NULL)
+	int simv = 0; //Счетчик колличества одинаковых символов 
+	char arr[N]; // Массив символов файла
+	int rat[N] = { 0 }; // Массив колличества повторений символов
+	int k = 0; //количество символов в файле
+	
+	if ((f = fopen( "D:/text.txt", "r")) == NULL) //Открытие файла для чтения
 	{
 		printf("Cannot open input file.\n");
 		return 1;
 	}
-	int rat[N] = { 0 };
-	char arr[N];
-	int i = 0;
-	while ((arr[i] = fgetc(f)) != EOF) 
-		i++;
-	for (int t = 0; t < N; t++)
+
+	while ((arr[k] = fgetc(f)) != EOF) //Заносим символы файла в массив
+		k++;
+
+	printf("Statistics by text file: \n"); //"Статистика по текстовому файлу"
+	for (int t = 0; t < k+1; t++, simv = 0) //Просмотр символов массива символов
 	{
-		simv = 0;
-		char ch = arr[t];
-		int found = 0;
-		pos++;
-		for (int i = 0; i < pos; i++)
+		char ch = arr[t]; //символ для сравнения
+		int found = 0; //условие 
+		for (int i = 0; i < t+1; i++)// Элементы до символа
 		{
 			if (ch == arr[i])
 			{
 				found++; simv++;
 			}
 		}
-		for (int i = pos; i < N; i++)
+		for (int i = t+1; i < k; i++) // Элементы после символа
 		{
-			if (ch == arr[i]) simv++; //
+			if (ch == arr[i]) simv++; 
 		}
 		if (found < 2)
 		{
-			printf("%d\n",ch);
-			if (ch == '\n') printf("Simvol \\n: %2i time\n", simv); else
-				if (ch == '\t') printf("Simvol \\t: %2i time\n", simv); else
-					if (ch == -1) printf("Simvol \\0: %2i time\n", simv); else
-								printf("Simvol %2c: %2i time\n", ch, simv); //на 1 слово больше так как пробела после него нет.
-			rat[t] = simv;
+			if (ch == '\n') printf("Symbol  \\n: %3i time\n", simv); else // Новая строка
+				if (ch == '\t') printf("Symbol  \\t: %3i time\n", simv); else // Табуляция
+					if (ch == -1) printf("Symbol EOF: %3i time\n", simv); else //Символ конца файла
+								printf("Symbol %3c: %3i time\n", ch, simv); // Символ и его количество
+			rat[t] = simv; //Запоминаем колличество символов, встретившихся впервые, с номером их расположения в arr[]
 		}
 	}
-
-	for (int i = N; i > -1; i--)
+	printf("\nCharacter output by frequency: \n"); //"Вывод символов по частоте"
+	for (int i = k; i > -1; i--)
 	{
-		char vivod = arr[i];
 			if (rat[i] > 0)
 			{
 				for (int t = 0; t < i; t++)
 				{
 					if (rat[i] < rat[t])
 					{
-						int tt = rat[i];
+						int rat_swap = rat[i]; //своп
 						rat[i] = rat[t];
-						rat[t] = tt;
+						rat[t] = rat_swap;
 
-						char vivod = arr[t];
+						char arr_swap= arr[t]; //пинг
 						arr[t] = arr[i];
-						arr[i] = vivod;
+						arr[i] = arr_swap;
 					}
 				}
 				if (arr[i] == '\n') printf("\\n"); else
 					if (arr[i] == '\t') printf("\\t"); else
-						if (arr[i] == -1) printf("\\0"); else
+						if (arr[i] == -1) printf("EOF"); else
 				printf("%c", arr[i]);
 			}
 	}
 	printf("\n");
 	fclose(f);
 	return 0;
-}
-
 }
