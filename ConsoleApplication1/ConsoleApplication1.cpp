@@ -5,11 +5,9 @@
 
 //количество букв, слов и предложений в тексте
 
-int main(int argc, char* argv[])
+int main()
 {
 	FILE* f;
-	char buk[87] = "qwetryuiopasdfghjklzxcbvnmйцукенгшщзхъфывапрлоджэячсмитьбю";
-	char pre[4] = "!?.";
 	int pred, slov, bukv, simv;
 	pred = slov = bukv = simv = 0;
 	int pos = 0;
@@ -20,13 +18,11 @@ int main(int argc, char* argv[])
 		printf("Cannot open input file.\n");
 		return 1;
 	}
-
 	int rat[N] = { 0 };
 	char arr[N];
 	int i = 0;
 	while ((arr[i] = fgetc(f)) != EOF) 
 		i++;
-
 	for (int t = 0; t < N; t++)
 	{
 		simv = 0;
@@ -46,16 +42,14 @@ int main(int argc, char* argv[])
 		}
 		if (found < 2)
 		{
+			printf("%d\n",ch);
 			if (ch == '\n') printf("Simvol \\n: %2i time\n", simv); else
 				if (ch == '\t') printf("Simvol \\t: %2i time\n", simv); else
-					if(ch == '\b') printf("Simvol \\b: %2i time\n", simv); else
-						if (ch == '\v') printf("Simvol \\v: %2i time\n", simv); else
-							if (ch == '\f') printf("Simvol \\f: %2i time\n", simv); else
+					if (ch == -1) printf("Simvol \\0: %2i time\n", simv); else
 								printf("Simvol %2c: %2i time\n", ch, simv); //на 1 слово больше так как пробела после него нет.
 			rat[t] = simv;
 		}
 	}
-	printf("Simvol \\0:  1 time\n\n");
 
 	for (int i = N; i > -1; i--)
 	{
@@ -75,47 +69,15 @@ int main(int argc, char* argv[])
 						arr[i] = vivod;
 					}
 				}
-				if (arr[i] == '\n') printf("\\n", simv); else
-					if (arr[i] == '\t') printf("\\t", simv); else
+				if (arr[i] == '\n') printf("\\n"); else
+					if (arr[i] == '\t') printf("\\t"); else
+						if (arr[i] == -1) printf("\\0"); else
 				printf("%c", arr[i]);
 			}
 	}
 	printf("\n");
-
-	char ch_pred = 0;
-	fseek(f, 0, SEEK_SET); //Переход в начала файла.
-	while (!feof(f))
-	{
-		ch = fgetc(f);
-		if (ch_pred != ' ' || ch_pred != '\n' || ch_pred != '\t' || ch_pred != '.' || ch_pred != '!' || ch_pred != '?')
-		if (ch == ' ' || ch == '\n' || ch == '\t' || ch == '.' || ch == '!' || ch == '?') slov++; //Считает точки и переход на следущую строку.
-		ch_pred = ch;
-	} //Табуляцию тоже считаем.
-	fseek(f, 0, SEEK_SET); //Переход в начала файла.
-	printf("Slov : %i\n", slov + 1); //на 1 слово больше так как пробела после него нет.
-
-	while (!feof(f))
-	{
-		ch = fgetc(f);
-		for (int i = 0; i < 87; i++)
-			if (ch == buk[i]) bukv++;;
-	}
-	fseek(f, 0, SEEK_SET);
-	printf("Bukv : %i", bukv);
-
-	while (!feof(f))
-	{
-		ch = fgetc(f);
-		for (int i = 0; i < 3; i++)
-			if (ch == pre[i])
-			{
-				pred++;
-				break;
-			}
-	}
-	fseek(f, 0, SEEK_SET);
-	printf("\nPredlozheniy : %i\n", pred);
-
 	fclose(f);
 	return 0;
+}
+
 }
