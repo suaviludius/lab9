@@ -5,8 +5,6 @@
 #include <time.h>
 #define N 180
 
-//стАТИСТИКА ПО ФАЙЛУ(СИМВОЛЫ)
-
 int main(int argc, char* argv[])
 {
 	FILE* f;
@@ -16,27 +14,25 @@ int main(int argc, char* argv[])
 	int k = 0; //количество символов в файле
 	char filename[100] = { 0 };
 
-	//for (int count = 0; count < argc; ++count)
-		//printf(" %s\n", argv[count]);
-
 	printf("Please enter a file address or enter a number from 1 to 3 to open the default file: ");
 	gets_s(filename);
 	if (filename[0] == 0)
 	{
-		printf("\bIf there is no input value, the default file will be taken.\n");
+		printf("If there is no input value, the default file will be taken.\n");
 		printf("Please enter a file address: ");
 		gets_s(filename);
 	}
 
+	int n = 9;
 	srand(time(NULL));
-	if ((f = fopen((filename[0] == 0 ? argv[rand() % 3 + 1] : filename[0] == '1' ? argv[1] : filename[0] == '2' ? argv[2] : filename[0] == '3' ? argv[3] : filename), "r")) == NULL) //Открытие файла для чтения
+	if ((f = fopen((filename[0] == 0 ? argv[n = rand() % 3 + 1] : filename[0] == '1' ? argv[n = 1] : filename[0] == '2' ? argv[n = 2] : filename[0] == '3' ? argv[n = 3] : filename), "r")) == NULL) //Открытие файла для чтения
 	{
 		printf("Cannot open input file.\n");
 		return 1;
 	}
+	printf("Item selected: %s\n", n == 0 ? argv[n] : n == 1 ? argv[n] : n == 2 ? argv[n] : n == 3 ? argv[n] : filename);
 
-	while ((arr[k] = fgetc(f)) != EOF) //Заносим символы файла в массив
-		k++;
+	while ((arr[k] = fgetc(f)) != EOF) k++; //Заносим символы файла в массив
 
 	FILE* fpout;
 	fpout = fopen("D:\\Statistic\\Statistic.txt", "w");
